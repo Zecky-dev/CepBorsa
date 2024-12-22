@@ -3,13 +3,14 @@ import {
   Text,
   View,
   TouchableOpacityProps,
+  ActivityIndicator,
 } from 'react-native';
 
 import styles from './CustomButton.style';
 import Icon from '@components/Icon';
 import getStyles from './CustomButton.style';
 import {useTheme} from '@context/ThemeProvider';
-import { createThemeColors } from '@utils/themes';
+import {createThemeColors} from '@utils/themes';
 
 type ButtonType = 'neutral' | 'primary' | 'danger';
 
@@ -17,9 +18,16 @@ type Props = {
   label: string;
   icon?: IconPropType;
   type?: ButtonType;
+  loading?: boolean;
 } & TouchableOpacityProps;
 
-const CustomButton = ({label, icon, type = 'neutral', ...rest}: Props) => {
+const CustomButton = ({
+  label,
+  icon,
+  type = 'neutral',
+  loading = false,
+  ...rest
+}: Props) => {
   const {theme} = useTheme();
   const colors = createThemeColors(theme);
   const styles = getStyles(theme);
@@ -50,9 +58,33 @@ const CustomButton = ({label, icon, type = 'neutral', ...rest}: Props) => {
   const dynamicStyles = createDynamicStyle();
 
   return (
-    <TouchableOpacity style={[styles.container, { backgroundColor: dynamicStyles.backgroundColor }]} activeOpacity={.8} {...rest}>
-      {icon && <Icon name={icon.name} size={icon.size} color={icon.color} />}
-      <Text style={[styles.label, { color: dynamicStyles.textColor }]}>{label}</Text>
+    <TouchableOpacity
+      disabled={loading}
+      style={[
+        styles.container,
+        {backgroundColor: dynamicStyles.backgroundColor},
+      ]}
+      activeOpacity={0.8}
+      {...rest}>
+      {loading ? (
+        <ActivityIndicator size={'small'} color={colors.primary} />
+      ) : (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {icon && (
+            <View style={{marginRight: 4}}>
+              <Icon name={icon.name} size={icon.size} color={icon.color} />
+            </View>
+          )}
+          <Text style={[styles.label, {color: dynamicStyles.textColor}]}>
+            {label}
+          </Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

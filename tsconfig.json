@@ -12,7 +12,13 @@
       "@screens": ["./screens"],
       "@screens/*": ["./screens/*"],
       "@types": ["./types"],
-      "@types/*": ["./types/*"]
+      "@types/*": ["./types/*"],
+      "@i18n": ["./src/i18n"],
+      "@i18n/*": ["./src/i18n/*"],
+      "@services": ["./services"],
+      "@services/*": ["./services/*"],
+      "@assets": ["./assets"],
+      "@assets/*": ["./assets/*"],
     },
     "include": [
         "src/**/*",

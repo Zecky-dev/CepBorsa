@@ -4,6 +4,7 @@ const COMMON_COLORS = {
   white: '#FFFFFF',
   black: '#000000',
   danger: '#E74C3C',
+  mutedBlack: 'rgba(0,0,0,0.5)',
 }
 
 const themes = {
@@ -11,11 +12,15 @@ const themes = {
     ...COMMON_COLORS,
     primary: '#0652DD',
     secondary: '',
+    text: '#000000',
+    mutedText: 'rgba(0,0,0,0.5)',
   },
   dark: {
     ...COMMON_COLORS,
     primary: '#2F3640',
     secondary: '',
+    text: '#FFFFFF',
+    mutedText: 'rgba(255,255,255,0.5)',
   },
 };
 

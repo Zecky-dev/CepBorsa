@@ -1,4 +1,4 @@
-package com.cepborsa
+package com.zeckydev.cepborsa
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

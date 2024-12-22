@@ -1,12 +1,14 @@
 import React from 'react';
 
 // Icons
-import MaterialIcon from '@react-native-vector-icons/material-icons';
-import MaterialCommunityIcon from '@react-native-vector-icons/material-design-icons';
-import FontAwesomeIcon from '@react-native-vector-icons/fontawesome';
-import EvilIcon from '@react-native-vector-icons/evil-icons'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import EvilIcon from 'react-native-vector-icons/EvilIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 
-export type IconType = 'material' | 'material-community' | 'fontawesome' | 'evil'
+export type IconType = 'material' | 'material-community' | 'fontawesome' | 'evil' | 'antdesign' | 'ion'
 
 type Props = {
   type?: IconType;
@@ -30,6 +32,12 @@ const Icon = ({ type = 'material-community', name, color, size }: Props) => {
       break;
     case 'evil':
       IconComponent = EvilIcon;
+      break;
+    case 'antdesign':
+      IconComponent = AntDesign;
+      break;
+    case 'ion':
+      IconComponent = IonIcon;
       break;
     default:
       IconComponent = MaterialCommunityIcon;

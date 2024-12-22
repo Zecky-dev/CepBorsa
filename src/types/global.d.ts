@@ -1,4 +1,5 @@
 import { IconType } from "@components/Icon/Icon";
+import { StockData } from "./StockResponse";
 
 declare global {
     type IconPropType = {
@@ -7,4 +8,14 @@ declare global {
         color?: string;
         type?: IconType;
     };
+    type RootStackParamList = {
+        Login: {email: string};
+        Register: undefined;
+        ForgotPassword: undefined;
+        Home: undefined;
+        Favorites: undefined;
+        StockDetail: { stockCode: string, stockSubLink: string, stockName: string; };
+        StockChat: { stock: StockData };
+        Profile: undefined;
+    }
 }
