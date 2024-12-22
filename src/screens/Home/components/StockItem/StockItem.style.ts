@@ -16,7 +16,7 @@ const getStyles = (theme: ColorSchemeName) => {
     },
     stockCode: {
         flexWrap: 'wrap',
-        color: colors.mutedBlack,
+        color: colors.mutedText,
         fontSize: 12,
         fontWeight: '600',
     },
@@ -28,7 +28,7 @@ const getStyles = (theme: ColorSchemeName) => {
     },
     stockName: {
         fontSize: 15,
-        color: colors.black,
+        color: colors.text,
         fontWeight: '600',
         width: '100%', 
         flexWrap: 'wrap'

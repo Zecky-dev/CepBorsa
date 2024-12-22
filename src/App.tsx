@@ -16,12 +16,14 @@ import {
   Profile,
   Favorites,
   StockDetail,
-  StockChat
+  StockChat,
 } from '@screens';
 
 // ThemeProvider
 import {ThemeProvider, AuthProvider, LanguageProvider} from '@context';
+import {MenuProvider} from 'react-native-popup-menu';
 import {useAuth} from '@context/AuthProvider';
+import { useTranslation } from 'react-i18next';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // Toast
@@ -35,6 +37,7 @@ import {createThemeColors} from '@utils/themes';
 // Components
 import {Icon, TabItemIcon, Loading, CustomHomeHeader} from '@components';
 import {SafeAreaView, StatusBar} from 'react-native';
+import { t } from 'i18next';
 
 // Common Header Options
 const COMMON_HEADER_OPTIONS = (colors: any): NativeStackNavigationOptions => ({
@@ -70,9 +73,10 @@ const HomeStack = () => {
   const colors = createThemeColors(theme);
 
   return (
-    <Stack.Navigator screenOptions={{
-      ...COMMON_HEADER_OPTIONS(colors)
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        ...COMMON_HEADER_OPTIONS(colors),
+      }}>
       <Stack.Screen
         name="Home"
         component={Home}
@@ -83,20 +87,11 @@ const HomeStack = () => {
       <Stack.Screen
         name="Favorites"
         component={Favorites}
-        options={{
-          title: 'Favorilerim',
-        }}
       />
+      <Stack.Screen name="StockDetail" component={StockDetail} />
       <Stack.Screen
-        name="StockDetail"
-        component={StockDetail}
-      />
-      <Stack.Screen
-        name='StockChat'
+        name="StockChat"
         component={StockChat}
-        options={{
-          tabBarStyle: { display: 'none' }
-        }}
       />
     </Stack.Navigator>
   );
@@ -150,7 +145,6 @@ const TabStack = () => {
               />
             </TabItemIcon>
           ),
-          title: 'Döviz',
           ...COMMON_HEADER_OPTIONS(colors),
         }}
       />
@@ -186,7 +180,6 @@ const TabStack = () => {
               />
             </TabItemIcon>
           ),
-          title: 'Profil',
           ...COMMON_HEADER_OPTIONS(colors),
         }}
       />
@@ -223,7 +216,9 @@ const AppWithContext = () => {
     <AuthProvider>
       <ThemeProvider>
         <LanguageProvider>
-          <App />
+          <MenuProvider>
+            <App />
+          </MenuProvider>
         </LanguageProvider>
       </ThemeProvider>
     </AuthProvider>

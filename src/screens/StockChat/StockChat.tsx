@@ -42,7 +42,7 @@ const StockChat = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `${route.params.stockCode} ${t('chat')}`,
+      title: `${route.params.stock.code || route.params.stock.name} ${t('chat')}`,
     });
   }, []);
 

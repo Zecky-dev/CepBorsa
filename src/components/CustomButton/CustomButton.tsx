@@ -12,7 +12,7 @@ import getStyles from './CustomButton.style';
 import {useTheme} from '@context/ThemeProvider';
 import {createThemeColors} from '@utils/themes';
 
-type ButtonType = 'neutral' | 'primary' | 'danger';
+type ButtonType = 'neutral' | 'primary' | 'danger' | 'success';
 
 type Props = {
   label: string;
@@ -50,6 +50,11 @@ const CustomButton = ({
       case 'danger':
         return {
           backgroundColor: colors.danger,
+          textColor: colors.white,
+        };
+      case 'success':
+        return {
+          backgroundColor: colors.success,
           textColor: colors.white,
         };
     }

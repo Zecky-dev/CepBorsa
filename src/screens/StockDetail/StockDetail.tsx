@@ -1,24 +1,31 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Text, SafeAreaView, Image, View, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, Image, View, ScrollView, TouchableOpacity} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 // Theme & Styles
 import getStyles from './StockDetail.style';
 import {useTheme} from '../../context/ThemeProvider';
+
+// Navigation
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
-// Navigation & Route types
+// Navigation & Types
 type StockDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'StockDetail'
 >;
 type StockDetailScreenRouteProp = RouteProp<RootStackParamList, 'StockDetail'>;
-
-import {fetchStock} from '@services/stockServices';
 import {StockData} from '@types/StockResponse';
-import {Icon, Loading, Space} from '@components';
 
+// Services
+import {fetchStock} from '@services/stockServices';
+
+// Translation
+import {useTranslation} from 'react-i18next';
+
+// Components
+import {Icon, Loading, Space} from '@components';
 import Section from './components/Section';
 import SectionRow from './components/Section/components/SectionRow/SectionRow';
 
@@ -27,6 +34,7 @@ const StockDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const styles = getStyles(theme);
 
   // Navigation & route
@@ -56,22 +64,23 @@ const StockDetail = () => {
         <View style={styles.headerRightContainer}>
           <TouchableOpacity
             onPress={() => {
-              if(stock) {
-                navigation.navigate('StockChat', { stock })
+              if (stock) {
+                navigation.navigate('StockChat', {stock});
               }
-            }}
-          >
-            <Icon name='chatbox-ellipses-outline' color={'white'} size={24} type='ion'/>
+            }}>
+            <Icon
+              name="chatbox-ellipses-outline"
+              color={'white'}
+              size={24}
+              type="ion"
+            />
           </TouchableOpacity>
-          <Space direction='x' size={16}/>
-          <TouchableOpacity
-            onPress={() => console.log("Halka arz favori")}
-          >
-            <Icon name='hearto' color={'white'} size={24} type='antdesign'/>
+          <Space direction="x" size={16} />
+          <TouchableOpacity onPress={() => console.log('Halka arz favori')}>
+            <Icon name="hearto" color={'white'} size={24} type="antdesign" />
           </TouchableOpacity>
-
         </View>
-      )
+      ),
     });
   }, [navigation, stock]);
 
@@ -80,24 +89,23 @@ const StockDetail = () => {
   }
 
   const keyTranslations: Record<string, string> = {
-    ipoDate: 'İlk Halka Arz Tarihi',
-    ipoPrice: 'İlk Halka Arz Fiyatı',
-    distrubitionMethod: 'Dağıtım Yöntemi',
-    shares: 'Pay Adedi',
-    broker: 'Aracı Kurum',
-    sharesActual: 'Gerçekleşen Pay Adedi',
-    sharesActualPercentage: 'Gerçekleşen Pay Yüzdesi',
-    bistCode: 'BIST Kodu',
-    market: 'Pazar',
-    firstTradingDate: 'İlk İşlem Tarihi',
-    image: 'Resim',
-    code: 'Kod',
-    name: 'Şirket Adı',
-    companyInfo: 'Şirket Hakkında',
+    ipoDate: t('ipoDate'),
+    ipoPrice: t('ipoPrice'),
+    distrubitionMethod: t('distrubitionMethod'),
+    shares: t('shares'),
+    broker: t('broker'),
+    sharesActual: t('sharesActual'),
+    sharesActualPercentage: t('sharesActualPercentage'),
+    bistCode: t('bistCode'),
+    market: t('market'),
+    firstTradingDate: t('firstTradingDate'),
+    image: t('image'),
+    code: t('code'),
+    name: t('name'),
+    companyInfo: t('companyInfo'),
   };
 
-  const { image, companyInfo, ...filteredStockData } = stock as StockData;
-
+  const {image, companyInfo, ...filteredStockData} = stock as StockData;
 
   return (
     <View style={styles.container}>
@@ -112,20 +120,19 @@ const StockDetail = () => {
           <Space size={24} />
 
           {/* Arz Bilgileri */}
-          <Section title="Arz Bilgileri">
+          <Section title={t('stockInfo')}>
             {/* companyInfo dışındaki key-value çiftlerini render ediyoruz */}
-            {Object.entries(filteredStockData)
-              .map(([key, value]) => (
-                <SectionRow
-                  key={key}
-                  title={keyTranslations[key]}
-                  value={value || 'BULUNAMADI'}
-                />
-              ))}
+            {Object.entries(filteredStockData).map(([key, value]) => (
+              <SectionRow
+                key={key}
+                title={keyTranslations[key]}
+                value={value || t('notFound')}
+              />
+            ))}
           </Section>
 
           {/* Şirket Hakkında */}
-          <Section title="Şirket Hakkında">
+          <Section title={t('companyInfo')}>
             {stock.companyInfo.descriptionHTML !== '' ? (
               <View style={{height: 300}}>
                 <WebView
@@ -164,7 +171,7 @@ const StockDetail = () => {
               </View>
             ) : (
               <Text style={styles.descriptionNotFound}>
-                Şirket hakkında bir bilgi verilmemiş!
+                {t('noInfoAboutCompany')}
               </Text>
             )}
           </Section>

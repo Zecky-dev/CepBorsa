@@ -6,6 +6,7 @@ const getStyles = (theme: ColorSchemeName) => {
         container: {
             flex: 1,
             backgroundColor: theme === "light" ? colors.white : colors.primary,
+            paddingHorizontal: 16,
             paddingVertical: 12,
         },
         logoutButton: {
@@ -18,50 +19,102 @@ const getStyles = (theme: ColorSchemeName) => {
             marginRight: 8,
         },
         
+        changeProfilePicButton: {
+            width: 128,
+            height: 128,
+            alignSelf: 'center',
+        },
+
         changeAvatarIcon: {
             width: 128,
             height: 128,
             resizeMode: 'contain',
         },
 
-        changeProfilePicButton: {
-            width: 128,
-            height: 128,
-            alignSelf: 'center',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-
         row: {
             flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 24,
             justifyContent: 'space-between',
-            marginBottom: 16,
+            alignItems: 'center',
         },
 
-        title: {
-            color: colors.text,
+        rowTitle: {
             fontSize: 16,
             fontWeight: '600',
+            color: colors.text,
+        },
+
+        rowValue: {
+            fontSize: 14,
+            fontWeight: '400',
+            color: colors.text,
         },
 
         changePasswordButton: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: '#F5F5F5',
-            padding: 12,
-            borderRadius: 4,
+            backgroundColor: colors.boxBackground,
+            paddingVertical: 12,
+            paddingHorizontal: 24,
+            borderRadius: 8,
         },
 
-        editActiveButton: {
-            backgroundColor: colors.primary,
+        changePasswordButtonText: {
+            fontSize: 16,
+        },
+
+        separatorLine: {
+            height: 1,
+            backgroundColor: colors.mutedText,
+            marginVertical: 16,
+        },
+
+        preferencesSectionTitle: {
+            fontSize: 20,
+            fontWeight: '600',
+            color: colors.text,
+        },
+
+        changeLanguageButton: {
+
+        },
+
+        changeLanguageButtonIcon: {
+            width: 36,
+            height: 36,
+        },
+
+        preferenceBox: {
+            backgroundColor: colors.boxBackground,
+            padding: 12,
+            borderRadius: 8,
+        },
+
+        input: {
+            paddingHorizontal: 16,
+            paddingVertical: 4,    
+            color: colors.text,
+        },
+
+        menuOptionContainer: {
+            flexDirection: 'row',
             alignItems: 'center',
+        },
+
+        editButton: {
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            backgroundColor: colors.primary,
+            width: 48,
+            height: 48,
+            borderRadius: 24,
             justifyContent: 'center',
-            width: 32,
-            height: 32,
-            borderRadius: 16,
+            alignItems: 'center',
         }
+
+
+
+
+        
+
 
        
 
