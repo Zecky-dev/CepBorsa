@@ -3,12 +3,12 @@ import {createThemeColors} from '../../utils/themes';
 const getStyles = (theme: ColorSchemeName) => {
   const colors = createThemeColors(theme);
   return StyleSheet.create({
+    container: {},
     label: {
       color: colors.white,
       fontSize: 15,
       fontWeight: 'semibold',
     },
-
     innerContainer: {
       backgroundColor: colors.white,
       flexDirection: 'row',

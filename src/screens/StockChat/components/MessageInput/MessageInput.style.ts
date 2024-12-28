@@ -4,10 +4,12 @@ const getStyles = (theme: ColorSchemeName) => {
     const colors = createThemeColors(theme);
     return StyleSheet.create({
         container: {
-            backgroundColor: 'white',
+            backgroundColor: colors.boxBackground,
             flexDirection: 'row',
             alignItems: 'center',
             borderRadius: 4,
+            marginHorizontal: 8,
+            marginBottom: 4
         },
         input: {
             flex: 1,

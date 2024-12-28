@@ -36,6 +36,7 @@ const Profile = () => {
   // Theme & Styles
   const {theme, setTheme} = useTheme();
   const styles = getStyles(theme);
+  const colors = createThemeColors(theme);
 
   const {signOut} = useAuth();
 
@@ -129,7 +130,7 @@ const Profile = () => {
           <View style={styles.row}>
             <Text style={styles.rowTitle}>{t('password')}:</Text>
             <TouchableOpacity
-              onPress={() => console.log('Şifre değiştirme yönlendirme')}
+              onPress={() => navigation.navigate('ChangePassword')}
               style={[styles.row, styles.changePasswordButton]}>
               <Icon name="lock" type="antdesign" size={18} />
               <Space direction="x" size={4} />
@@ -148,7 +149,7 @@ const Profile = () => {
           <Space />
           {/* Dil */}
           <View style={[styles.row, styles.preferenceBox]}>
-            <Text style={[styles.rowTitle, {flex: 1}]}>{t('language')}</Text>
+            <Text style={[styles.rowTitle, {flex: 1, color: colors.black}]}>{t('language')}</Text>
             <Menu>
               <MenuTrigger disabled={!editActive}>
                 <Image
@@ -188,7 +189,7 @@ const Profile = () => {
           <Space />
           {/* Tema */}
           <View style={[styles.row, styles.preferenceBox]}>
-            <Text style={styles.rowTitle}>{t('theme')}</Text>
+            <Text style={[styles.rowTitle, { color: colors.black }]}>{t('theme')}</Text>
             <Menu>
               <MenuTrigger disabled={!editActive}>
                 <Image

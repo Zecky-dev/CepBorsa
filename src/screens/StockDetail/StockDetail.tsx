@@ -121,7 +121,6 @@ const StockDetail = () => {
 
           {/* Arz Bilgileri */}
           <Section title={t('stockInfo')}>
-            {/* companyInfo dışındaki key-value çiftlerini render ediyoruz */}
             {Object.entries(filteredStockData).map(([key, value]) => (
               <SectionRow
                 key={key}
@@ -146,6 +145,7 @@ const StockDetail = () => {
                             font-size: 32px;
                             line-height: 1.6;
                             color: ${theme === 'dark' ? 'white' : 'black'};
+                            background-color: 'red';
                           }
                           h1, h2, h3 {
                             color: #007BFF;

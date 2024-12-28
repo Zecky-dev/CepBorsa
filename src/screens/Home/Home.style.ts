@@ -9,7 +9,7 @@ const getStyles = (theme: ColorSchemeName) => {
             
         },
         separator: {
-            height: 1,
+            height: 0.5,
             backgroundColor: '#E0E0E0',
         }
     })

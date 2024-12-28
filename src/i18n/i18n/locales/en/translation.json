@@ -73,6 +73,7 @@
   "name": "Company Name",
   "companyInfo": "About the Company",
   "noInfoAboutCompany": "There is no information about the company!",
-  "notFound": "NOT FOUND"
+  "notFound": "NOT FOUND",
+  "favorites": "Favorites",
 
 }

@@ -1,9 +1,13 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationState,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 // Screens
 import {
@@ -17,13 +21,13 @@ import {
   Favorites,
   StockDetail,
   StockChat,
+  ChangePassword,
 } from '@screens';
 
 // ThemeProvider
 import {ThemeProvider, AuthProvider, LanguageProvider} from '@context';
 import {MenuProvider} from 'react-native-popup-menu';
 import {useAuth} from '@context/AuthProvider';
-import { useTranslation } from 'react-i18next';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // Toast
@@ -37,7 +41,6 @@ import {createThemeColors} from '@utils/themes';
 // Components
 import {Icon, TabItemIcon, Loading, CustomHomeHeader} from '@components';
 import {SafeAreaView, StatusBar} from 'react-native';
-import { t } from 'i18next';
 
 // Common Header Options
 const COMMON_HEADER_OPTIONS = (colors: any): NativeStackNavigationOptions => ({
@@ -84,15 +87,24 @@ const HomeStack = () => {
           header: () => <CustomHomeHeader />,
         }}
       />
-      <Stack.Screen
-        name="Favorites"
-        component={Favorites}
-      />
+      <Stack.Screen name="Favorites" component={Favorites} />
       <Stack.Screen name="StockDetail" component={StockDetail} />
-      <Stack.Screen
-        name="StockChat"
-        component={StockChat}
-      />
+      <Stack.Screen name="StockChat" component={StockChat} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStack = () => {
+  const {theme} = useTheme();
+  const colors = createThemeColors(theme);
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        ...COMMON_HEADER_OPTIONS(colors),
+      }}>
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 };
@@ -103,16 +115,17 @@ const TabStack = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={() => ({
+      screenOptions={({route}) => ({
         tabBarStyle: {
           backgroundColor: colors.primary,
-          height: 60,
+          height: route.name === 'StockChat' ? 0 : 60,
         },
         tabBarItemStyle: {
           justifyContent: 'center',
           alignItems: 'center',
         },
         tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
       })}>
       <Tab.Screen
         name="HomeStack"
@@ -168,7 +181,7 @@ const TabStack = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStack}
         options={{
           tabBarIcon: ({focused}) => (
             <TabItemIcon focused={focused}>
@@ -180,6 +193,7 @@ const TabStack = () => {
               />
             </TabItemIcon>
           ),
+          headerShown: false,
           ...COMMON_HEADER_OPTIONS(colors),
         }}
       />
@@ -213,15 +227,17 @@ const App = () => {
 
 const AppWithContext = () => {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <LanguageProvider>
-          <MenuProvider>
-            <App />
-          </MenuProvider>
-        </LanguageProvider>
-      </ThemeProvider>
-    </AuthProvider>
+    <GestureHandlerRootView>
+      <AuthProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <MenuProvider>
+              <App />
+            </MenuProvider>
+          </LanguageProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 };
 

@@ -73,5 +73,6 @@
   "name": "Şirket Adı",
   "companyInfo": "Şirket Hakkında",
   "noInfoAboutCompany": "Şirket hakkında bilgi bulunmamaktadır!",
-  "notFound": "BULUNAMADI"
+  "notFound": "BULUNAMADI",
+  "favorites": "Favoriler"
 }

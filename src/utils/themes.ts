@@ -12,7 +12,7 @@ const themes = {
   light: {
     ...COMMON_COLORS,
     primary: '#0652DD',
-    secondary: '',
+    secondary: '#FFFFFF',
     text: '#000000',
     mutedText: 'rgba(0,0,0,0.5)',
     boxBackground: '#F5F5F5',
@@ -20,7 +20,7 @@ const themes = {
   dark: {
     ...COMMON_COLORS,
     primary: '#2F3640',
-    secondary: '',
+    secondary: '#353B48',
     text: '#FFFFFF',
     mutedText: 'rgba(255,255,255,0.5)',
     boxBackground: 'white',

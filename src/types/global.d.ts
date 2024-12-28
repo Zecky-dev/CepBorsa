@@ -17,5 +17,6 @@ declare global {
         StockDetail: { stockCode: string, stockSubLink: string, stockName: string; };
         StockChat: { stock: StockData };
         Profile: undefined;
+        ChangePassword: undefined;
     }
 }
