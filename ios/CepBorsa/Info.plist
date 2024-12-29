@@ -59,5 +59,11 @@
 		<string>AntDesign.ttf</string>
 		<string>Ionicons.ttf</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+ 	<string>$(NSPhotoLibraryUsageDescription)</string>
+	<key>NSCameraUsageDescription</key>
+ 	<string>$(NSCameraUsageDescription)</string>
+	<key>NSMicrophoneUsageDescription</key>
+ 	<string>$(NSMicrophoneUsageDescription)</string>
 </dict>
 </plist>

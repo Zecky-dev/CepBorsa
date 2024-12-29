@@ -82,7 +82,6 @@ const Login = () => {
       try {
         setLoading(true);
         await signIn(email, password);
-        console.info('LOGIN_SUCCESS');
       } catch (error: any) {
         const errorCode = error.code || 'unknown';
         showToast({

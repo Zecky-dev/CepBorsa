@@ -17,6 +17,7 @@ import {useTheme} from '@context/ThemeProvider';
 
 // Icon
 import Icon from '@components/Icon';
+import { createThemeColors } from '@utils/themes';
 
 type Props = {
   label?: string;
@@ -26,12 +27,14 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>,
     labelStyle?: StyleProp<TextStyle>,
     inputContainerStyle?: StyleProp<ViewStyle>,
-    inputStyle?: StyleProp<TextStyle>
+    inputStyle?: StyleProp<TextStyle>,
+    innerContainer?: StyleProp<ViewStyle>
   }
 } & TextInputProps;
 
 const CustomTextInput = ({label, icon, isPassword = false, additionalStyles, ...rest}: Props) => {
   const {theme} = useTheme();
+  const colors = createThemeColors(theme);
   const styles = getStyles(theme);
 
   const [isSecure, setIsSecure] = useState(true);
@@ -39,7 +42,7 @@ const CustomTextInput = ({label, icon, isPassword = false, additionalStyles, ...
   return (
     <View style={[styles.container, additionalStyles?.containerStyle]}>
       {label && <Text style={[styles.label, additionalStyles?.labelStyle]}>{label}</Text>}
-      <View style={styles.innerContainer}>
+      <View style={[styles.innerContainer, additionalStyles?.innerContainer]}>
         <View style={[styles.inputContainer, additionalStyles?.inputContainerStyle]}>
           {icon && (
             <Icon
@@ -50,6 +53,7 @@ const CustomTextInput = ({label, icon, isPassword = false, additionalStyles, ...
             />
           )}
           <TextInput
+            placeholderTextColor={colors.mutedBlack}
             autoCapitalize="none"
             style={[styles.input, additionalStyles?.inputStyle ,Platform.OS === 'ios' && {paddingLeft: 4}]}
             secureTextEntry={isSecure && isPassword}

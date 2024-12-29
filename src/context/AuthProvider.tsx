@@ -10,10 +10,21 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 interface AuthContextType {
   user: FirebaseAuthTypes.User | null;
   initializing: boolean;
-  signIn: (email: string, password: string) => Promise<FirebaseAuthTypes.UserCredential>;
-  signUp: (email: string, password: string) => Promise<FirebaseAuthTypes.UserCredential>;
+  signIn: (
+    email: string,
+    password: string,
+  ) => Promise<FirebaseAuthTypes.UserCredential>;
+  signUp: (
+    email: string,
+    password: string,
+  ) => Promise<FirebaseAuthTypes.UserCredential>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  changePassword: (
+    oldPassword: string,
+    newPassword: string,
+    newPasswordAgain: string,
+  ) => Promise<{status: string; message: string}>;
 }
 
 interface AuthProviderProps {
@@ -23,12 +34,12 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within a AuthProvider');
-      }
-    return context;
-}
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within a AuthProvider');
+  }
+  return context;
+};
 
 const AuthProvider = ({children}: AuthProviderProps) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
@@ -49,6 +60,55 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     resetPassword: async email => {
       await auth().sendPasswordResetEmail(email);
     },
+    changePassword: async (
+      oldPassword: string,
+      newPassword: string,
+      newPasswordAgain: string,
+    ) => {
+      if (!oldPassword || !newPassword || !newPasswordAgain) {
+        return {
+          status: 'warning',
+          message: 'fillBlankAreas',
+        };
+      }
+
+      if (newPassword !== newPasswordAgain) {
+        return {
+          status: 'warning',
+          message: 'notSamePasswords',
+        };
+      }
+
+      try {
+        if (user && user.email) {
+          const emailCredential = auth.EmailAuthProvider.credential(
+            user.email,
+            oldPassword,
+          );
+          await user.reauthenticateWithCredential(emailCredential);
+          await user.updatePassword(newPassword);
+          authContext.signOut();
+
+          return {
+            status: 'success',
+            message: 'passwordChanged',
+          };
+        } else {
+          return {
+            status: 'error',
+            message: 'userNotAuthenticated',
+          };
+        }
+      } catch (error: any) {
+        const errorMessage = error.code
+          ? `authErrorMessages.${error.code}`
+          : 'unknown';
+        return {
+          status: 'error',
+          message: errorMessage,
+        };
+      }
+    },
   };
 
   useEffect(() => {
@@ -59,13 +119,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     return subscriber;
   }, [initializing]);
 
-
   return (
-    <AuthContext.Provider value={authContext}>
-        {children}
-    </AuthContext.Provider>
-  )
-
+    <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

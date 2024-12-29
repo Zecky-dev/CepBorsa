@@ -28,6 +28,7 @@ const getStyles = (theme: ColorSchemeName) => {
         changeAvatarIcon: {
             width: 128,
             height: 128,
+            borderRadius: 64,
             resizeMode: 'contain',
         },
 
@@ -108,16 +109,34 @@ const getStyles = (theme: ColorSchemeName) => {
             borderRadius: 24,
             justifyContent: 'center',
             alignItems: 'center',
+        },
+
+        pickImageModalContentContainer: {
+            backgroundColor: 'white',
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+        },
+
+        pickImageModalContainer: {
+            justifyContent: 'flex-end',
+            padding: 0,
+            marginHorizontal: 0,
+        },
+
+        pickImageModalButton: {
+            flexDirection: 'row',
+            paddingHorizontal: 12,
+            paddingVertical: 16,
+        },
+
+        pickImageModalButtonText: {
+            fontSize: 16,
+        },
+
+        pickImageModalButtonContent: {
+            flexDirection: 'row',
+            alignItems: 'center',
         }
-
-
-
-
-        
-
-
-       
-
 
 
     })

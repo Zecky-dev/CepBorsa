@@ -34,7 +34,8 @@
     "auth/captcha-check-failed": "Captcha verification failed.",
     "auth/invalid-verification-code": "Invalid verification code.",
     "auth/weak-password": "The given password is invalid.",
-    "auth/email-already-in-use": "The given email address is already in use."
+    "auth/email-already-in-use": "The given email address is already in use.",
+    "auth/unknown": "An unknown error occurred!"
   },
   "unknownError": "An unknown error occurred!",
   "error": "Error!",
@@ -75,5 +76,15 @@
   "noInfoAboutCompany": "There is no information about the company!",
   "notFound": "NOT FOUND",
   "favorites": "Favorites",
-
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "newPasswordAgain": "New Password Again",
+  "fillBlankAreas": "Please fill all blank areas!",
+  "notSamePasswords": "The entered passwords are not the same!",
+  "passwordChanged": "Your password has been changed successfully! Please login with your new password.",
+  "success": "Success!",
+  "userNotAuthenticated": "User is not authenticated!",
+  "warning": "Warning!",
+  "camera_unavailable_error": "Camera is unavailable!",
+  "camera_permission_error": "Camera permission is not granted!"
 }

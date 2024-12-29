@@ -34,7 +34,8 @@
     "auth/captcha-check-failed": "Captcha doğrulaması başarısız oldu.",
     "auth/invalid-verification-code": "Geçersiz doğrulama kodu.",
     "auth/weak-password": "Girilen şifre geçersiz.",
-    "auth/email-already-in-use": "Girilen e-posta adresi kullanılıyor."
+    "auth/email-already-in-use": "Girilen e-posta adresi kullanılıyor.",
+    "auth/unknown": "An unknown error occurred!"
   },
   "unknownError": "Bilinmeyen bir hata oluştu!",
   "error": "Hata!",
@@ -74,5 +75,16 @@
   "companyInfo": "Şirket Hakkında",
   "noInfoAboutCompany": "Şirket hakkında bilgi bulunmamaktadır!",
   "notFound": "BULUNAMADI",
-  "favorites": "Favoriler"
+  "favorites": "Favoriler",
+  "oldPassword": "Eski Şifre",
+  "newPassword": "Yeni Şifre",
+  "newPasswordAgain": "Yeni Şifre Tekrar",
+  "fillBlankAreas": "Lütfen hiçbir alanı boş bırakmayınız!",
+  "notSamePasswords": "Girilen şifreler aynı değil!",
+  "passwordChanged": "Şifreniz başarıyla değiştirildi, lütfen yeni şifrenizle tekrar giriş yapınız!",
+  "success": "Başarılı!",
+  "userNotAuthenticated": "Kullanıcı kimliği doğrulanamadı!",
+  "warning": "Uyarı!",
+  "camera_unavailable_error": "Kamera erişilebilir değil!",
+  "camera_permission_error": "Kamera izini verilmemiş!"
 }

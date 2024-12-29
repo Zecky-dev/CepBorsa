@@ -1,57 +1,70 @@
-import React, {useLayoutEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image, TextInput} from 'react-native';
-
-// Theme & Styles
-import getStyles from './Profile.style';
-import {useTheme} from '../../context/ThemeProvider';
-
-// Language
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '@context/AuthProvider';
-import {useLanguage} from '@context/LanguageProvider';
-
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-
+import React, {useLayoutEffect, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Platform,
+  SafeAreaView,
+} from 'react-native';
 import {CustomButton, Icon, Space} from '@components';
-
-import auth from '@react-native-firebase/auth';
-
-import {createThemeColors} from '@utils/themes';
-
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import Modal from 'react-native-modal';
+
+// Theme & Styles
+import getStyles from './Profile.style';
+import {useTheme} from '../../context/ThemeProvider';
+import {createThemeColors} from '@utils/themes';
+
+// Language
+import {useTranslation} from 'react-i18next';
+import {useAuth} from '@context/AuthProvider';
+import {useLanguage} from '@context/LanguageProvider';
+
+// Navigation
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+
+import auth from '@react-native-firebase/auth';
+import {pickImage} from '@utils/helpers/helpers';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Profile'
 >;
-type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
 
 const Profile = () => {
-  // Theme & Styles
+  // Hooks
+  const {t} = useTranslation();
+  const {language, changeLanguage} = useLanguage();
+  const {signOut} = useAuth();
   const {theme, setTheme} = useTheme();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  // Theme & Styles
   const styles = getStyles(theme);
   const colors = createThemeColors(theme);
 
-  const {signOut} = useAuth();
-
-  // Translation
-  const {t} = useTranslation();
-  const {language, changeLanguage} = useLanguage();
-
-  const navigation = useNavigation<ProfileScreenNavigationProp>();
-
   const currentUser = auth().currentUser;
-  const [editActive, setEditActive] = useState(false);
-  const [nameSurname, setNameSurname] = useState(currentUser?.displayName);
 
+  // Edit mode
+  const [editActive, setEditActive] = useState(false);
+  const [pickImageModalVisible, setPickImageModalVisible] = useState(false);
+
+  // Preferences
+  const [nameSurname, setNameSurname] = useState(currentUser?.displayName);
   const [themePref, setThemePref] = useState(theme);
   const [languagePref, setLanguagePref] = useState(language);
+  const [image, setImage] = useState<{
+    name: string;
+    uri: string;
+  } | null>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -63,7 +76,7 @@ const Profile = () => {
           <Icon name="poweroff" type="antdesign" color={'white'} size={18} />
         </TouchableOpacity>
       ),
-      title: t('profile')
+      title: t('profile'),
     });
   });
 
@@ -80,22 +93,41 @@ const Profile = () => {
     setEditActive(false);
     changeLanguage(languagePref);
     setTheme(themePref);
-  }
+  };
+
+  const handleImageSelection = async (type: 'camera' | 'library') => {
+    try {
+      const image = await pickImage(type);
+      if (image) {
+        setImage(image);
+      }
+    } catch (error) {
+      console.error('Image selection failed:', error);
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Fotoğraf değiştirme */}
       <TouchableOpacity
         disabled={!editActive}
-        onPress={() => console.log('Resim değiştir')}
+        onPress={() => setPickImageModalVisible(true)}
         style={styles.changeProfilePicButton}>
         <Image
           source={
-            theme === 'dark'
+            image?.uri
+              ? {
+                  uri: image.uri,
+                }
+              : theme === 'dark'
               ? require('@assets/images/changeAvatar_dark.png')
               : require('@assets/images/changeAvatar_light.png')
           }
-          style={styles.changeAvatarIcon}
+          style={[styles.changeAvatarIcon, image && {
+            resizeMode: 'cover',
+            borderWidth: 1,
+            borderColor: colors.mutedText,
+          }]}
         />
       </TouchableOpacity>
       <Space size={32} />
@@ -149,7 +181,9 @@ const Profile = () => {
           <Space />
           {/* Dil */}
           <View style={[styles.row, styles.preferenceBox]}>
-            <Text style={[styles.rowTitle, {flex: 1, color: colors.black}]}>{t('language')}</Text>
+            <Text style={[styles.rowTitle, {flex: 1, color: colors.black}]}>
+              {t('language')}
+            </Text>
             <Menu>
               <MenuTrigger disabled={!editActive}>
                 <Image
@@ -189,7 +223,9 @@ const Profile = () => {
           <Space />
           {/* Tema */}
           <View style={[styles.row, styles.preferenceBox]}>
-            <Text style={[styles.rowTitle, { color: colors.black }]}>{t('theme')}</Text>
+            <Text style={[styles.rowTitle, {color: colors.black}]}>
+              {t('theme')}
+            </Text>
             <Menu>
               <MenuTrigger disabled={!editActive}>
                 <Image
@@ -251,10 +287,61 @@ const Profile = () => {
         <TouchableOpacity
           onPress={() => setEditActive(true)}
           style={styles.editButton}>
-          <Icon name="pencil" type="evil" color={'white'} size={32}/>
+          <Icon name="pencil" type="evil" color={'white'} size={32} />
         </TouchableOpacity>
       )}
-    </View>
+
+      <Modal
+        style={[
+          styles.pickImageModalContainer,
+          Platform.OS === 'android'
+            ? {
+                marginTop: 0,
+                marginHorizontal: 0,
+              }
+            : {
+                margin: 0,
+              },
+        ]}
+        isVisible={pickImageModalVisible}
+        useNativeDriver={true}
+        onBackButtonPress={() => setPickImageModalVisible(false)}
+        onBackdropPress={() => setPickImageModalVisible(false)}>
+        <SafeAreaView style={styles.pickImageModalContentContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setPickImageModalVisible(false);
+              handleImageSelection('camera')
+            }}
+            style={styles.pickImageModalButton}>
+            <View style={styles.pickImageModalButtonContent}>
+              <Icon
+                name="camera"
+                type="evil"
+                size={28}
+                color={colors.primary}
+              />
+              <Space size={8} direction="x" />
+              <Text style={styles.pickImageModalButtonText}>
+                Kamera ile çek
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await handleImageSelection('library')
+              setPickImageModalVisible(false);
+            }}
+            style={styles.pickImageModalButton}>
+            <View style={styles.pickImageModalButtonContent}>
+              <Icon name="image" type="evil" size={28} color={colors.primary} />
+              <Space size={8} direction="x" />
+              <Text style={styles.pickImageModalButtonText}>Galeriden Seç</Text>
+            </View>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </Modal>
+    </SafeAreaView>
   );
 };
 

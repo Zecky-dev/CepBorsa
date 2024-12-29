@@ -41,6 +41,7 @@ import {createThemeColors} from '@utils/themes';
 // Components
 import {Icon, TabItemIcon, Loading, CustomHomeHeader} from '@components';
 import {SafeAreaView, StatusBar} from 'react-native';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 // Common Header Options
 const COMMON_HEADER_OPTIONS = (colors: any): NativeStackNavigationOptions => ({
@@ -228,15 +229,15 @@ const App = () => {
 const AppWithContext = () => {
   return (
     <GestureHandlerRootView>
-      <AuthProvider>
-        <ThemeProvider>
-          <LanguageProvider>
-            <MenuProvider>
-              <App />
-            </MenuProvider>
-          </LanguageProvider>
-        </ThemeProvider>
-      </AuthProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <LanguageProvider>
+              <MenuProvider>
+                <App />
+              </MenuProvider>
+            </LanguageProvider>
+          </ThemeProvider>
+        </AuthProvider>
     </GestureHandlerRootView>
   );
 };

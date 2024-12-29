@@ -35,27 +35,32 @@ const CustomButton = ({
   const createDynamicStyle = (): {
     backgroundColor: string;
     textColor: string;
+    loadingIndicatorColor?: string;
   } => {
     switch (type) {
       case 'neutral':
         return {
           backgroundColor: colors.white,
           textColor: colors.black,
+          loadingIndicatorColor: colors.primary,
         };
       case 'primary':
         return {
           backgroundColor: colors.primary,
           textColor: colors.white,
+          loadingIndicatorColor: colors.white,
         };
       case 'danger':
         return {
           backgroundColor: colors.danger,
           textColor: colors.white,
+          loadingIndicatorColor: colors.white,
         };
       case 'success':
         return {
           backgroundColor: colors.success,
           textColor: colors.white,
+          loadingIndicatorColor: colors.white,
         };
     }
   };
@@ -72,7 +77,7 @@ const CustomButton = ({
       activeOpacity={0.8}
       {...rest}>
       {loading ? (
-        <ActivityIndicator size={'small'} color={colors.primary} />
+        <ActivityIndicator size={'small'} color={dynamicStyles.loadingIndicatorColor} />
       ) : (
         <View
           style={{

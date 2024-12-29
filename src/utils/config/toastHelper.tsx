@@ -8,6 +8,7 @@ import Toast, {
   ToastConfigParams,
   ToastProps,
   ToastShowParams,
+  BaseToast,
 } from 'react-native-toast-message';
 
 const COMMON_TOAST_STYLES = {
@@ -32,6 +33,10 @@ const COMMON_TOAST_STYLES = {
     fontSize: 12,
     fontWeight: '500',
   },
+  iconContainer: {
+    justifyContent: "center",
+    paddingHorizontal: 8,
+  },
 };
 
 export const toastConfig: ToastConfig = {
@@ -48,7 +53,7 @@ export const toastConfig: ToastConfig = {
       text1NumberOfLines={2}
       text2NumberOfLines={3}
       renderLeadingIcon={() => (
-        <View style={{justifyContent: 'center', paddingHorizontal: 8}}>
+        <View style={COMMON_TOAST_STYLES.iconContainer}>
           <Icon name="checkmark" size={24} type="ion" color={'white'} />
         </View>
       )}
@@ -67,8 +72,27 @@ export const toastConfig: ToastConfig = {
       text1NumberOfLines={2}
       text2NumberOfLines={3}
       renderLeadingIcon={() => (
-        <View style={{justifyContent: 'center', paddingHorizontal: 8}}>
+        <View style={COMMON_TOAST_STYLES.iconContainer}>
           <Icon name="close" size={24} type="antdesign" color={'white'} />
+        </View>
+      )}
+    />
+  ),
+  warning: (props: ToastConfigParams<ToastProps>) => (
+    <BaseToast
+      {...props}
+      style={{
+        ...COMMON_TOAST_STYLES.container,
+        backgroundColor: '#FFAF40',
+      }}
+      contentContainerStyle={COMMON_TOAST_STYLES.contentContainer}
+      text1Style={COMMON_TOAST_STYLES.text1Style}
+      text2Style={COMMON_TOAST_STYLES.text2Style}
+      text1NumberOfLines={2}
+      text2NumberOfLines={3}
+      renderLeadingIcon={() => (
+        <View style={COMMON_TOAST_STYLES.iconContainer}>
+          <Icon name="warning" size={24} type="antdesign" color={'white'} />
         </View>
       )}
     />
@@ -90,9 +114,8 @@ export const showToast = (params: Omit<ToastShowParams, 'topOffset'>) => {
     topOffset = 16;
   }
 
-  // Now show the toast with the calculated topOffset
   Toast.show({
-    topOffset, // Dynamically calculated topOffset
-    ...params, // Spread the rest of the parameters (text1, text2, type, etc.)
+    topOffset,
+    ...params,
   });
 };
