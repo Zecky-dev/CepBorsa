@@ -105,7 +105,7 @@ const StockDetail = () => {
     companyInfo: t('companyInfo'),
   };
 
-  const {image, companyInfo, ...filteredStockData} = stock as StockData;
+  const {image, companyInfo, id, ...filteredStockData} = stock as StockData;
 
   return (
     <View style={styles.container}>

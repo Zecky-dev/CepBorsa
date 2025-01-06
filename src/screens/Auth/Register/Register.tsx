@@ -63,6 +63,7 @@ const Register = () => {
           createDate,
           favorites: [],
           status: 'active',
+          nameSurname,
         });
         console.log("SIGNUP_SUCCESS");
       } catch (error: any) {

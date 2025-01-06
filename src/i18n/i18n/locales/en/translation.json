@@ -44,7 +44,7 @@
   "passwordEmpty": "Password must be entered!",
   "yourMessage": "Your message...",
   "chat": "Chat",
-  "noMessageYet": "There are no message yet.\nBe the first to comment! 🙂",
+  "noMessageYet": "There are no message yet.\nBe the first to message! 🙂",
   "save": "Save",
   "changePassword": "Change Password",
   "preferences": "Preferences",
@@ -85,6 +85,12 @@
   "success": "Success!",
   "userNotAuthenticated": "User is not authenticated!",
   "warning": "Warning!",
-  "camera_unavailable_error": "Camera is unavailable!",
-  "camera_permission_error": "Camera permission is not granted!"
+  "cameraUnavailableError": "Camera is unavailable!",
+  "cameraPermissionError": "Camera permission is not granted!",
+  "profileUpdateError": "An error occurred while updating the profile!",
+  "profileUpdateSuccess": "Your profile information has been updated successfully!",
+  "emailValidationError": "The email address you entered is invalid!",
+  "emailSent": "E-mail Sent!",
+  "emailSentDescription": "A password reset email has been sent, if you have an account registered with this email address, please check your email.",
+  "emptyBotMessageText": "You haven't asked the bot a question yet\nAsk your first question now 🙂"
 }

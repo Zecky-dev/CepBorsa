@@ -28,4 +28,5 @@ export type StockData = {
     foundCity: string;
     foundYear: string;
   };
+  id: string;
 };

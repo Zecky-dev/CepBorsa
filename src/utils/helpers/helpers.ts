@@ -6,6 +6,8 @@ import {
   launchImageLibrary,
   ErrorCode,
 } from 'react-native-image-picker';
+import moment from 'moment';
+import 'moment/locale/tr';
 
 // Ekran boyutuna göre klavye offset'ini hesaplar
 export const getKeyboardVerticalOffset = () => {
@@ -17,12 +19,12 @@ export const getKeyboardVerticalOffset = () => {
   return 0;
 };
 
-// Hata yönetimi
+// Resim seçme işlemi
 const handleImagePickError = (errorCode?: ErrorCode, errorMessage?: string) => {
   if (errorCode) {
     const errorMessages: Partial<Record<ErrorCode, string>> = {
-      camera_unavailable: i18next.t('camera_unavailable_error'),
-      permission: i18next.t('camera_permission_error'),
+      camera_unavailable: i18next.t('cameraUnavailableError'),
+      permission: i18next.t('cameraPermissionError'),
     };
 
     const message =
@@ -45,7 +47,6 @@ const handleImagePickError = (errorCode?: ErrorCode, errorMessage?: string) => {
   }
 };
 
-// Resim seçme işlemi
 export const pickImage = async (
   type: 'camera' | 'library',
 ): Promise<{name: string; uri: string} | void> => {
@@ -85,4 +86,27 @@ export const pickImage = async (
   } catch (error) {
     return Promise.reject(error);
   }
+};
+
+// Firebase tarihi formatlama
+
+export const formatFirebaseDate = (firebaseTimestamp: {
+  seconds: number;
+  nanoseconds: number;
+}) => {
+  const milliseconds =
+    firebaseTimestamp.seconds * 1000 + firebaseTimestamp.nanoseconds / 1000000;
+  return moment(milliseconds).format('DD MMMM YYYY - HH:mm');
+};
+
+// Check if email address is valid
+export const validateEmail = (email: string) => {
+  if (email && email.trim() !== '') {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
+  }
+  return false;
 };

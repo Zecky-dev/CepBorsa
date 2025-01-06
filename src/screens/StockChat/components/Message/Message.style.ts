@@ -5,6 +5,7 @@ const getStyles = (theme: ColorSchemeName) => {
   return StyleSheet.create({
     container: {
       flexDirection: 'row',
+      padding: 10,
     },
     image: {
       width: 60,
@@ -15,6 +16,7 @@ const getStyles = (theme: ColorSchemeName) => {
         flexShrink: 1,
         marginLeft: 12,
         justifyContent: 'center',
+        flex: 1,
     },
     rightTopContainer: {
       flexDirection: 'row',

@@ -25,7 +25,12 @@ import {
 } from '@screens';
 
 // ThemeProvider
-import {ThemeProvider, AuthProvider, LanguageProvider} from '@context';
+import {
+  ThemeProvider,
+  AuthProvider,
+  LanguageProvider,
+  LoadingProvider,
+} from '@context';
 import {MenuProvider} from 'react-native-popup-menu';
 import {useAuth} from '@context/AuthProvider';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -229,15 +234,17 @@ const App = () => {
 const AppWithContext = () => {
   return (
     <GestureHandlerRootView>
-        <AuthProvider>
-          <ThemeProvider>
-            <LanguageProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <LoadingProvider>
               <MenuProvider>
                 <App />
               </MenuProvider>
-            </LanguageProvider>
-          </ThemeProvider>
-        </AuthProvider>
+            </LoadingProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 };

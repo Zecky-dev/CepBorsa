@@ -20,7 +20,6 @@ const COMMON_TOAST_STYLES = {
     borderLeftWidth: 0,
     marginLeft: 0,
     paddingLeft: 0,
-    padding: 0,
   },
   text1Style: {
     color: 'white',
@@ -45,7 +44,7 @@ export const toastConfig: ToastConfig = {
       {...props}
       style={{
         ...COMMON_TOAST_STYLES.container,
-        backgroundColor: '#1DD1A1',
+        backgroundColor: '#1DD1A1'
       }}
       contentContainerStyle={COMMON_TOAST_STYLES.contentContainer}
       text1Style={COMMON_TOAST_STYLES.text1Style}
@@ -97,6 +96,25 @@ export const toastConfig: ToastConfig = {
       )}
     />
   ),
+  info: (props: ToastConfigParams<ToastProps>) => (
+    <BaseToast
+      {...props}
+      style={{
+        ...COMMON_TOAST_STYLES.container,
+        backgroundColor: '#3498DB',
+      }}
+      contentContainerStyle={COMMON_TOAST_STYLES.contentContainer}
+      text1Style={COMMON_TOAST_STYLES.text1Style}
+      text2Style={COMMON_TOAST_STYLES.text2Style}
+      text1NumberOfLines={2}
+      text2NumberOfLines={4}
+      renderLeadingIcon={() => (
+        <View style={COMMON_TOAST_STYLES.iconContainer}>
+          <Icon name="information-circle" size={24} type="ion" color={'white'} />
+        </View>
+      )}
+    />
+  )
 };
 
 export const showToast = (params: Omit<ToastShowParams, 'topOffset'>) => {

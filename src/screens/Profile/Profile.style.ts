@@ -20,8 +20,6 @@ const getStyles = (theme: ColorSchemeName) => {
         },
         
         changeProfilePicButton: {
-            width: 128,
-            height: 128,
             alignSelf: 'center',
         },
 
@@ -29,7 +27,6 @@ const getStyles = (theme: ColorSchemeName) => {
             width: 128,
             height: 128,
             borderRadius: 64,
-            resizeMode: 'contain',
         },
 
         row: {

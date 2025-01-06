@@ -1,4 +1,4 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,8 +18,7 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 
-import MessageInput from './components/MessageInput';
-import {ListEmpty, Space} from '@components';
+import {ListEmpty, Space, MessageInput} from '@components';
 
 import mockMessages from './mockMessages.json';
 import Message from './components/Message';
@@ -40,9 +39,13 @@ const StockChat = () => {
   const route = useRoute<StockChatScreenRouteProp>();
   const {t} = useTranslation();
 
+  const [messages, setMessages] = useState<any[]>([]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `${route.params.stock.code || route.params.stock.name} ${t('chat')}`,
+      title: `${route.params.stock.code || route.params.stock.name} ${t(
+        'chat',
+      )}`,
     });
   }, []);
 
@@ -51,23 +54,38 @@ const StockChat = () => {
 
   const currentUser = auth().currentUser;
 
-  const addMessage = async (stockCodeOrName: string, message: string) => {
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection('messages')
+      .doc(route.params.stock.id)
+      .collection('messages')
+      .orderBy('createDate', 'desc')
+      .onSnapshot(
+        snapshot => {
+          const fetchedMessages = snapshot.docs.map(doc => doc.data());
+          setMessages(fetchedMessages);
+        },
+        error => {
+          console.error('Mesajlar getirilirken hata:', error);
+        },
+      );
+    return () => unsubscribe();
+  }, [route.params.stock.id]);
+
+  const addMessage = async (message: string) => {
     try {
       await firestore()
         .collection('messages')
-        .doc(stockCodeOrName)
+        .doc(route.params.stock.id)
         .collection('messages')
         .add({
-          owner: {
-            nameSurname: currentUser?.displayName,
-            email: currentUser?.email,
-          },
+          owner: currentUser?.email,
           createDate: firestore.FieldValue.serverTimestamp(),
           message,
         });
-        console.log('Mesaj ekleme başarılı!')
+      console.log('Mesaj ekleme başarılı!');
     } catch (error) {
-
+      console.error('Mesaj eklenirken hata:', error);
     }
   };
 
@@ -76,10 +94,11 @@ const StockChat = () => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={getKeyboardVerticalOffset()}>
+      
       <FlatList
         contentContainerStyle={styles.flatlistContentContainer}
         showsVerticalScrollIndicator={false}
-        data={mockMessages}
+        data={messages}
         renderItem={({item}) => <Message message={item} />}
         ListEmptyComponent={() => (
           <ListEmpty
@@ -93,7 +112,8 @@ const StockChat = () => {
         )}
         ItemSeparatorComponent={() => <Space />}
       />
-      <MessageInput addMessage={addMessage} stock={route.params.stock} />
+      
+      <MessageInput addMessage={addMessage}/>
     </KeyboardAvoidingView>
   );
 };

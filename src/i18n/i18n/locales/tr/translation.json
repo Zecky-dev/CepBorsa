@@ -85,6 +85,13 @@
   "success": "Başarılı!",
   "userNotAuthenticated": "Kullanıcı kimliği doğrulanamadı!",
   "warning": "Uyarı!",
-  "camera_unavailable_error": "Kamera erişilebilir değil!",
-  "camera_permission_error": "Kamera izini verilmemiş!"
+  "cameraUnavailableError": "Kamera erişilebilir değil!",
+  "cameraPermissionError": "Kamera izini verilmemiş!",
+  "profileUpdateError": "Profil güncellenirken bir hata oluştu!",
+  "profileUpdateSuccess": "Profil bilgileriniz başarıyla güncellendi!",
+  "noMessageYet": "Henüz mesaj yok.\nİlk mesajı sen yaz! 🙂",
+  "emailSent": "E-posta Gönderildi!",
+  "emailValidationError": "Girdiğiniz e-posta adresi geçerli değil!",
+  "emailSentDescription": "Şifre sıfırlama e-postası gönderildi, eğer bu e-posta adresi ile kayıtlı bir hesabınız varsa e-postanızı kontrol edin.",
+  "emptyBotMessageText": "Henüz bot'a bir soru sormadın\nİlk sorunu hemen sor 🙂"
 }
