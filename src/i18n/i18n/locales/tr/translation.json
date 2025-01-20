@@ -2,6 +2,7 @@
   "appSlogan": "Cebindeki Borsa",
   "register": "Kayıt Ol",
   "login": "Giriş Yap",
+  "loginFailTitle": "Giriş Başarısız!",
   "forgotPassword": "Şifremi Unuttum",
   "email": "E-posta Adresi",
   "password": "Şifre",
@@ -93,5 +94,7 @@
   "emailSent": "E-posta Gönderildi!",
   "emailValidationError": "Girdiğiniz e-posta adresi geçerli değil!",
   "emailSentDescription": "Şifre sıfırlama e-postası gönderildi, eğer bu e-posta adresi ile kayıtlı bir hesabınız varsa e-postanızı kontrol edin.",
-  "emptyBotMessageText": "Henüz bot'a bir soru sormadın\nİlk sorunu hemen sor 🙂"
+  "emptyBotMessageText": "Henüz bot'a bir soru sormadın\nİlk sorunu hemen sor 🙂",
+  "exchangeError": "Döviz, altın ve gümüş bilgileri getirilirken bir hata oluştu!",
+  "exchangeConvert": "Döviz Dönüştürme"
 }

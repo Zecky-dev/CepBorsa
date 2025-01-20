@@ -22,6 +22,7 @@ import {
   StockDetail,
   StockChat,
   ChangePassword,
+  ExchangeConvert
 } from '@screens';
 
 // ThemeProvider
@@ -115,6 +116,21 @@ const ProfileStack = () => {
   );
 };
 
+const ExchangeStack = () => {
+  const {theme} = useTheme();
+  const colors = createThemeColors(theme);
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        ...COMMON_HEADER_OPTIONS(colors),
+      }}>
+      <Stack.Screen name="Exchange" component={Exchange} />
+      <Stack.Screen name="ExchangeConvert" component={ExchangeConvert} />
+    </Stack.Navigator>
+  );
+}
+
 const TabStack = () => {
   const {theme} = useTheme();
   const colors = createThemeColors(theme);
@@ -151,8 +167,8 @@ const TabStack = () => {
         }}
       />
       <Tab.Screen
-        name="Exchange"
-        component={Exchange}
+        name="ExchangeTab"
+        component={ExchangeStack}
         options={{
           tabBarIcon: ({focused}) => (
             <TabItemIcon focused={focused}>
@@ -164,6 +180,7 @@ const TabStack = () => {
               />
             </TabItemIcon>
           ),
+          headerShown: false,
           ...COMMON_HEADER_OPTIONS(colors),
         }}
       />

@@ -18,5 +18,7 @@ declare global {
         StockChat: { stock: StockData };
         Profile: undefined;
         ChangePassword: undefined;
+        Exchange: undefined;
+        ExchangeConvert: { currency: any };
     }
 }

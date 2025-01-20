@@ -92,5 +92,7 @@
   "emailValidationError": "The email address you entered is invalid!",
   "emailSent": "E-mail Sent!",
   "emailSentDescription": "A password reset email has been sent, if you have an account registered with this email address, please check your email.",
-  "emptyBotMessageText": "You haven't asked the bot a question yet\nAsk your first question now 🙂"
+  "emptyBotMessageText": "You haven't asked the bot a question yet\nAsk your first question now 🙂",
+  "exchangeError": "An error occurred while fetching the exchange rates!",
+  "exchangeConvert": "Exchange Convertion"
 }

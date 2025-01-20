@@ -6,7 +6,6 @@ import {
   Image,
   TextInput,
   Platform,
-  SafeAreaView,
 } from 'react-native';
 import {CustomButton, Icon, Space} from '@components';
 import {
@@ -39,6 +38,7 @@ import storage from '@react-native-firebase/storage';
 // Helpers
 import {pickImage} from '@utils/helpers/helpers';
 import {showToast} from '@utils/config/toastHelper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
