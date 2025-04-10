@@ -1,24 +1,39 @@
-import React from 'react';
-import {View, Image, ActivityIndicator, Text} from 'react-native';
-import TypeWriterText from './components/TypeWriterText';
+import React, { useState, useCallback } from 'react';
+import { View, Image, ActivityIndicator, Text } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native'; // 🔹 Eklendi
 
-import {useTheme} from '@context/ThemeProvider';
+import { useTheme } from '@context/ThemeProvider';
 import getStyles from './MessageBubble.style';
-import {Message} from '@screens/Bot/types/Message';
+import { Message } from '@screens/Bot/types/Message';
+import { createThemeColors } from '@utils/themes';
+
+import auth from '@react-native-firebase/auth';
 
 type Props = {
   message: Message;
 };
 
-const MessageBubble = ({message: {message, sender}}: Props) => {
-  const {theme} = useTheme();
+const MessageBubble = ({ message: { message, sender, id, loading } }: Props) => {
+  const { theme } = useTheme();
   const styles = getStyles(theme);
+  const colors = createThemeColors(theme);
+
+  const [user, setUser] = useState(auth().currentUser); // Kullanıcıyı state olarak tut
+
+  // Ekran her odaklandığında kullanıcı bilgilerini güncelle
+  useFocusEffect(
+    useCallback(() => {
+      setUser(auth().currentUser);
+    }, [])
+  );
+
   return (
     <View
       style={[
         styles.container,
         sender ? styles.userContainer : styles.botContainer,
-      ]}>
+      ]}
+    >
       {!sender && (
         <Image
           source={
@@ -33,29 +48,26 @@ const MessageBubble = ({message: {message, sender}}: Props) => {
         style={[
           styles.bubbleWrapper,
           sender ? styles.userBubbleWrapper : styles.botBubbleWrapper,
-        ]}>
+        ]}
+      >
         <View
           style={[
             styles.bubble,
             sender ? styles.userBubble : styles.botBubble,
-          ]}>
+          ]}
+        >
           {!sender && <Text style={styles.senderName}>CepBorsa BOT</Text>}
-
-          {!sender ? (
-            <TypeWriterText speed={0.5} text={message} />
-          ) : (
-            <Text>{message}</Text>
-          )}
+          <Text>{loading ? <ActivityIndicator size={'small'} color={colors.primary} /> : message}</Text>
         </View>
       </View>
       {sender && (
         <Image
           source={
-            !sender.photoURL
+            !user?.photoURL
               ? theme === 'dark'
                 ? require('@assets/images/user_dark.png')
                 : require('@assets/images/user_light.png')
-              : {uri: sender.photoURL}
+              : { uri: user.photoURL }
           }
           style={styles.avatar}
         />

@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '@context/ThemeProvider';
@@ -38,6 +38,7 @@ const ChangePassword = () => {
         type: res.status,
         text1: t(res.status),
         text2: t(res.message),
+        visibilityTime: 1250,
       })
     }
     catch(error: any) {
@@ -45,6 +46,7 @@ const ChangePassword = () => {
         type: error.status,
         text1: t(error.status),
         text2: t(error.message),
+        visibilityTime: 1250,
       })
     }
     finally {

@@ -8,6 +8,7 @@ const getStyles = (theme: ColorSchemeName) => {
       flexDirection: 'row',
       alignItems: 'center',
       paddingVertical: 12,
+      backgroundColor: theme === "dark" ? colors.secondary : 'transparent' 
     },
     stockLogo: {
       width: 48,

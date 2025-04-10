@@ -55,6 +55,28 @@ const StockChat = () => {
   const currentUser = auth().currentUser;
 
   useEffect(() => {
+    const fetchInitialMessages = async () => {
+      try {
+        const snapshot = await firestore()
+          .collection('messages')
+          .doc(route.params.stock.id)
+          .collection('messages')
+          .orderBy('createDate', 'desc')
+          .get();
+
+        // Tüm dokümanları işlemeden önce beklet
+        const initialMessages = await Promise.all(
+          snapshot.docs.map(async doc => doc.data()),
+        );
+        setMessages(initialMessages);
+      } catch (error) {
+        console.error('Mesajlar yüklenirken hata:', error);
+      }
+    };
+    fetchInitialMessages();
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = firestore()
       .collection('messages')
       .doc(route.params.stock.id)
@@ -83,9 +105,8 @@ const StockChat = () => {
           createDate: firestore.FieldValue.serverTimestamp(),
           message,
         });
-      console.log('Mesaj ekleme başarılı!');
     } catch (error) {
-      console.error('Mesaj eklenirken hata:', error);
+      console.error('ERROR_ADD_MESSAGE:', error);
     }
   };
 
@@ -94,7 +115,6 @@ const StockChat = () => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={getKeyboardVerticalOffset()}>
-      
       <FlatList
         contentContainerStyle={styles.flatlistContentContainer}
         showsVerticalScrollIndicator={false}
@@ -111,9 +131,10 @@ const StockChat = () => {
           />
         )}
         ItemSeparatorComponent={() => <Space />}
+        removeClippedSubviews={false}
       />
-      
-      <MessageInput addMessage={addMessage}/>
+
+      <MessageInput addMessage={addMessage} />
     </KeyboardAvoidingView>
   );
 };

@@ -38,7 +38,11 @@ import storage from '@react-native-firebase/storage';
 // Helpers
 import {pickImage} from '@utils/helpers/helpers';
 import {showToast} from '@utils/config/toastHelper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import axios from 'axios';
+
+// User profile photo services
+import {uploadPhoto, deletePhoto} from '@services/userServices';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -59,19 +63,18 @@ const Profile = () => {
   const styles = getStyles(theme);
   const colors = createThemeColors(theme);
 
-
   const [editActive, setEditActive] = useState(false);
   const [pickImageModalVisible, setPickImageModalVisible] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
   // Preferences
-  const [nameSurname, setNameSurname] = useState(
-    user?.displayName || '',
-  );
+  const [nameSurname, setNameSurname] = useState(user?.displayName || '');
   const [themePref, setThemePref] = useState(theme);
   const [languagePref, setLanguagePref] = useState(language);
   const [image, setImage] = useState<{
     name: string;
     uri: string;
+    base64: string;
   } | null>(null);
 
   useEffect(() => {
@@ -80,13 +83,16 @@ const Profile = () => {
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.logoutButton}
-          onPress={() => signOut()}>
+          onPress={() => {
+            setLogoutModalVisible(true)
+            setEditActive(false)
+          }}>
           <Icon name="poweroff" type="antdesign" color={'white'} size={18} />
         </TouchableOpacity>
       ),
       title: t('profile'),
     });
-  }, [navigation, t]);
+  }, [t]);
 
   const handleCancelSave = () => {
     setLanguagePref(language);
@@ -103,13 +109,21 @@ const Profile = () => {
       setTheme(themePref);
       // İsim soyisim ve fotoğraf güncellemesi
       await updateNameAndSurname();
-      await uploadAndUpdatePhoto();
+      if (image) {
+        const res = await uploadPhoto(image.base64, user!.email!);
+        if (res?.success && res?.url) {
+          user?.updateProfile({
+            photoURL: res.url,
+          });
+        }
+      }
       setEditActive(false);
       hideLoading();
       showToast({
         type: 'success',
         text1: t('success'),
         text2: t('profileUpdateSuccess'),
+        visibilityTime: 1000,
       });
     } catch (error) {
       console.error('PROFILE_UPDATE_ERROR', error);
@@ -135,39 +149,6 @@ const Profile = () => {
     }
   };
 
-  const uploadAndUpdatePhoto = async () => {
-    try {
-      const username = user?.email!.split('@')[0];
-      const referenceName = `profileImages/${username}.png`;
-      const reference = storage().ref(referenceName);
-      if (image?.uri) {
-        await reference.putFile(image.uri);
-        const imageURL = await reference.getDownloadURL();
-        await user?.updateProfile({
-          photoURL: imageURL,
-        });
-        await firestore().collection('users').doc(user?.email!).update({
-          photo: imageURL,
-        });
-      } else {
-        reference.getDownloadURL().then(async () => {
-          await reference.delete();
-          await user?.updateProfile({
-            photoURL: null,
-          });
-          await firestore()
-            .collection('users')
-            .doc(user?.email!)
-            .update({
-              photo: null,
-            });
-        });
-      }
-    } catch (error) {
-      console.log('UPLOAD_IMAGE_FAILED', error);
-    }
-  };
-
   const handleImageSelection = async (type: 'camera' | 'library') => {
     try {
       const image = await pickImage(type);
@@ -178,7 +159,6 @@ const Profile = () => {
       console.error('Image selection failed:', error);
     }
   };
-
 
   if (user) {
     return (
@@ -367,7 +347,9 @@ const Profile = () => {
           <TouchableOpacity
             onPress={() => setEditActive(true)}
             style={styles.editButton}>
-            <Icon name="pencil" type="evil" color={'white'} size={32} />
+            <View style={{bottom: 2.5, left: 1}}>
+              <Icon name="pencil" type="evil" color={theme === "dark" ? colors.black : colors.white} size={28} />
+            </View>
           </TouchableOpacity>
         )}
 
@@ -427,6 +409,35 @@ const Profile = () => {
               </View>
             </TouchableOpacity>
           </SafeAreaView>
+        </Modal>
+
+        <Modal
+          backdropOpacity={0.85}
+          isVisible={logoutModalVisible}
+          style={styles.logoutModalContainer}
+          useNativeDriver={true}
+          onBackButtonPress={() => setLogoutModalVisible(false)}
+          onBackdropPress={() => setLogoutModalVisible(false)}>
+          <View style={styles.logoutModalContent}>
+            <Text style={styles.logoutModalTitle}>{t('areYouSure')}</Text>
+            <Text style={styles.logoutModalText}>{t('logoutText')}</Text>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonContainer}>
+                <CustomButton
+                  label={t('yes')}
+                  type="success"
+                  onPress={signOut}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <CustomButton
+                  label={t('no')}
+                  type="danger"
+                  onPress={() => setLogoutModalVisible(false)}
+                />
+              </View>
+            </View>
+          </View>
         </Modal>
       </SafeAreaView>
     );

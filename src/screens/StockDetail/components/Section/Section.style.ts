@@ -4,6 +4,7 @@ const getStyles = (theme: ColorSchemeName) => {
     const colors = createThemeColors(theme)
     return StyleSheet.create({
         container: {
+
         },
         title: {
             color: theme === "light" ? colors.black : colors.white,

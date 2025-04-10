@@ -29,9 +29,13 @@ import {Icon, Loading, Space} from '@components';
 import Section from './components/Section';
 import SectionRow from './components/Section/components/SectionRow/SectionRow';
 
+// Helpers
+import {toggleFavorite, isStockFavorited} from '@utils/helpers/common';
+
 const StockDetail = () => {
   const [stock, setStock] = useState<StockData>();
   const [loading, setLoading] = useState(true);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -53,8 +57,30 @@ const StockDetail = () => {
     }
   };
 
+  // Favori ekleme/çıkarma
+  const favoriteUnFavoriteStock = async () => {
+    if (!stock) return;
+
+    const stockToFavorite = {
+      name: stock.name,
+      code: stock.code,
+      date: stock.ipoDate,
+      image: stock.image,
+      sublink: route.params.stockSubLink,
+    };
+
+    const favorited = await toggleFavorite(stockToFavorite);
+    setIsFavorited(favorited);
+  };
+
+  const checkStockFavorited = async () => {
+    const favorited = await isStockFavorited(route.params.stockSubLink);
+    setIsFavorited(favorited);
+  };
+
   useEffect(() => {
     fetchStockData();
+    checkStockFavorited();
   }, []);
 
   useLayoutEffect(() => {
@@ -76,13 +102,18 @@ const StockDetail = () => {
             />
           </TouchableOpacity>
           <Space direction="x" size={16} />
-          <TouchableOpacity onPress={() => console.log('Halka arz favori')}>
-            <Icon name="hearto" color={'white'} size={24} type="antdesign" />
+          <TouchableOpacity onPress={favoriteUnFavoriteStock}>
+            <Icon
+              name={!isFavorited ? 'hearto' : 'heart'}
+              color={isFavorited ? 'red' : 'white'}
+              size={24}
+              type="antdesign"
+            />
           </TouchableOpacity>
         </View>
       ),
     });
-  }, [navigation, stock]);
+  }, [navigation, stock, isFavorited]);
 
   if (loading) {
     return <Loading />;
@@ -105,80 +136,79 @@ const StockDetail = () => {
     companyInfo: t('companyInfo'),
   };
 
-  const {image, companyInfo, id, ...filteredStockData} = stock as StockData;
+  if (stock) {
+    const {image, companyInfo, id, ...filteredStockData} = stock as StockData;
 
-  return (
-    <View style={styles.container}>
-      {stock && (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.innerTopContainer}>
-            <Image source={{uri: stock.image}} style={styles.logo} />
-            <Space />
-            <Text style={styles.name}>{stock.name}</Text>
-          </View>
+    return (
+      <View style={styles.container}>
+        {stock && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.innerTopContainer}>
+              <Image source={{uri: stock.image}} style={styles.logo} />
+              <Space />
+              <Text style={styles.name}>{stock.name}</Text>
+            </View>
 
-          <Space size={24} />
+            <Space size={24} />
 
-          {/* Arz Bilgileri */}
-          <Section title={t('stockInfo')}>
-            {Object.entries(filteredStockData).map(([key, value]) => (
-              <SectionRow
-                key={key}
-                title={keyTranslations[key]}
-                value={value || t('notFound')}
-              />
-            ))}
-          </Section>
-
-          {/* Şirket Hakkında */}
-          <Section title={t('companyInfo')}>
-            {stock.companyInfo.descriptionHTML !== '' ? (
-              <View style={{height: 300}}>
-                <WebView
-                  source={{
-                    html: `
-                    <html>
-                      <head>
-                        <style>
-                          body {
-                            font-family: Arial, sans-serif;
-                            font-size: 32px;
-                            line-height: 1.6;
-                            color: ${theme === 'dark' ? 'white' : 'black'};
-                            background-color: 'red';
-                          }
-                          h1, h2, h3 {
-                            color: #007BFF;
-                          }
-                          p {
-                            margin-bottom: 16px;
-                          }
-                        </style>
-                      </head>
-                      <body>
-                        ${
-                          stock.companyInfo.descriptionHTML
-                        }                        
-                          <p><strong>Kuruluş:</strong> ${
-                            stock.companyInfo.foundCity
-                          }, ${stock.companyInfo.foundYear}</p>
-                      </body>
-                    </html>
-                    `,
-                  }}
-                  style={{width: '100%'}}
+            {/* Arz Bilgileri */}
+            <Section title={t('stockInfo')}>
+              {Object.entries(filteredStockData).map(([key, value]) => (
+                <SectionRow
+                  key={key}
+                  title={keyTranslations[key]}
+                  value={value || t('notFound')}
                 />
-              </View>
-            ) : (
-              <Text style={styles.descriptionNotFound}>
-                {t('noInfoAboutCompany')}
-              </Text>
-            )}
-          </Section>
-        </ScrollView>
-      )}
-    </View>
-  );
+              ))}
+            </Section>
+
+            {/* Şirket Hakkında */}
+            <Section title={t('companyInfo')}>
+              {stock.companyInfo.descriptionHTML !== '' ? (
+                <View style={{height: 300}}>
+                  <WebView
+                    nestedScrollEnabled={true}
+                    scrollEnabled={false}
+                    source={{
+                      html: `
+                      <html>
+                        <head>
+                          <style>
+                            * {
+                              color: ${theme === 'dark' ? 'white' : 'black'}
+                            }
+                            body {
+                              font-family: Arial, sans-serif;
+                              font-size: 32px;
+                              line-height: 1.6;
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          ${
+                            stock.companyInfo.descriptionHTML
+                          }                        
+                            <p><strong>Kuruluş:</strong> ${
+                              stock.companyInfo.foundCity
+                            }, ${stock.companyInfo.foundYear}</p>
+                        </body>
+                      </html>
+                      `,
+                    }}
+                    style={{width: '100%', backgroundColor: 'transparent'}}
+                  />
+                </View>
+              ) : (
+                <Text style={styles.descriptionNotFound}>
+                  {t('noInfoAboutCompany')}
+                </Text>
+              )}
+            </Section>
+          </ScrollView>
+        )}
+      </View>
+    );
+  }
 };
 
 export default StockDetail;

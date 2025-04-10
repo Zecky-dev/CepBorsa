@@ -26,6 +26,7 @@ const getStyles = (theme: ColorSchemeName) => {
 
     input: {
       flex: 1,
+      color: colors.black,
     },
 
     hideUnhidePasswordButton: {

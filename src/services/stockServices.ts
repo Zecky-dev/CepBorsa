@@ -1,15 +1,9 @@
 import axios from "axios";
-import { Platform } from "react-native";
-
-const PORT = 3000
-
-
-const BASE_URL = Platform.OS === "android" ? `http://10.0.2.2:${PORT}/api` : `http://localhost:${PORT}/api`
+import { BASE_URL } from '../constants';
 
 import { StockApiResponse } from "@types/StockResponse";
 
-
-export const fetchAllStocks = async (year: number = 2024, page: number = 1) : Promise<StockListResponse> => {
+export const fetchAllStocks = async (year: number = 2025, page: number = 1) : Promise<StockListResponse> => {
     try {
         const response = await axios.get<StockListResponse>(`${BASE_URL}/stock/list?year=${year}&page=${page}`)
         return response.data;

@@ -100,7 +100,7 @@ const getStyles = (theme: ColorSchemeName) => {
             position: 'absolute',
             top: 12,
             right: 12,
-            backgroundColor: colors.primary,
+            backgroundColor: theme === "dark" ? colors.white : colors.primary,
             width: 48,
             height: 48,
             borderRadius: 24,
@@ -133,6 +133,37 @@ const getStyles = (theme: ColorSchemeName) => {
         pickImageModalButtonContent: {
             flexDirection: 'row',
             alignItems: 'center',
+        },
+
+        logoutModalContainer: {
+          
+        },
+
+        logoutModalContent: {
+          backgroundColor: 'white',
+          padding: 12,
+          borderRadius: 8,
+        },
+
+        logoutModalTitle: {
+            color: colors.black,
+            fontWeight: '700',
+            fontSize: 20,
+            marginBottom: 8,
+        },
+
+        logoutModalText: {
+            fontSize: 18,
+            marginBottom: 16,
+        },
+
+        buttonsContainer: {
+            flexDirection: 'row',
+            gap: 20
+        },
+
+        buttonContainer: {
+            flex: 1,
         }
 
 

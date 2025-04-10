@@ -6,6 +6,7 @@ const getStyles = (theme: ColorSchemeName) => {
         container: {
             flex: 1,
             backgroundColor: colors.secondary,
+            padding: 12,
         }
     })
 }

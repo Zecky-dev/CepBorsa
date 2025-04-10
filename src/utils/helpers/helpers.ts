@@ -9,6 +9,10 @@ import {
 import moment from 'moment';
 import 'moment/locale/tr';
 
+import RNFS from 'react-native-fs';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+
+
 // Ekran boyutuna göre klavye offset'ini hesaplar
 export const getKeyboardVerticalOffset = () => {
   const screenHeight = Dimensions.get('window').height;
@@ -47,9 +51,15 @@ const handleImagePickError = (errorCode?: ErrorCode, errorMessage?: string) => {
   }
 };
 
+const resizeImage = async (uri: string) => {
+  const res = await ImageResizer.createResizedImage(uri, 800, 800, 'JPEG', 80)
+  const base64String = await RNFS.readFile(res.uri, 'base64');
+  return base64String;
+}
+
 export const pickImage = async (
   type: 'camera' | 'library',
-): Promise<{name: string; uri: string} | void> => {
+): Promise<{name: string; uri: string, base64: string} | void> => {
   try {
     const result =
       type === 'camera'
@@ -57,11 +67,13 @@ export const pickImage = async (
             mediaType: 'photo',
             quality: 1,
             cameraType: 'front',
+            includeBase64: true,
           })
         : await launchImageLibrary({
             mediaType: 'photo',
             quality: 1,
             selectionLimit: 1,
+            includeBase64: true,
           });
 
     if (result.didCancel) {
@@ -76,10 +88,12 @@ export const pickImage = async (
     const assets = result.assets;
     if (assets) {
       const image = assets[0];
-      if (image.fileName && image.uri) {
+      if (image.fileName && image.uri && image.base64) {
+        const resizedImage = await resizeImage(image.uri);
         return {
           name: image.fileName,
           uri: image.uri,
+          base64: resizedImage,
         };
       }
     }
@@ -88,8 +102,7 @@ export const pickImage = async (
   }
 };
 
-// Firebase tarihi formatlama
-
+// Format firebase date
 export const formatFirebaseDate = (firebaseTimestamp: {
   seconds: number;
   nanoseconds: number;

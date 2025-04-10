@@ -51,24 +51,32 @@ const Bot = () => {
   // Fonksiyonu tekrar ele
   const addMessage = async (message: string) => {
     const userMessage = {
+      id: Date.now().toString(),
       message: message,
-      sender: currentUser,
+      sender: 'user',
+      loading: false,
     };
 
     // Önce kullanıcı mesajını ekle
     setMessages(prevMessages => [...prevMessages, userMessage]);
 
+    const loadingMessageId = `loading-${Date.now()}`;
+    setMessages(prevMessages => [
+      ...prevMessages,
+      {id: loadingMessageId, message: '...', loading: true},
+    ]);
+
     try {
       // Bot yanıtını al
       const res = await askQuestion(message);
-
       if ('data' in res && res.success) {
-        const botMessage = {
-          message: res.data,
-        };
-
-        // Bot mesajını ekle
-        setMessages(prevMessages => [...prevMessages, botMessage]);
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.id === loadingMessageId
+              ? {id: Date.now().toString(), message: res.data}
+              : msg,
+          ),
+        );
       } else {
         // Hata durumunda bot hata mesajı
         const botErrorMessage = {
@@ -78,11 +86,16 @@ const Bot = () => {
         setMessages(prevMessages => [...prevMessages, botErrorMessage]);
       }
     } catch (error) {
-      const botErrorMessage = {
-        message: 'Bir hata oluştu',
-      };
-
-      setMessages(prevMessages => [...prevMessages, botErrorMessage]);
+      setMessages(prevMessages =>
+        prevMessages.map(msg =>
+          msg.id === loadingMessageId
+            ? {
+                id: Date.now().toString(),
+                message: 'Bir hata oluştu',
+              }
+            : msg,
+        ),
+      );
     }
   };
 
@@ -119,7 +132,9 @@ const Bot = () => {
           setMessages(JSON.parse(savedMessages));
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('LOAD_MESSAGE_HISTORY_ERROR', error);
+    }
   };
 
   const saveMessagesToHistory = async () => {

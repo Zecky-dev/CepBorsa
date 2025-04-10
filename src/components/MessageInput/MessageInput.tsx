@@ -6,6 +6,7 @@ import {Icon} from '@components';
 import getStyles from './MessageInput.style';
 import {useTheme} from '@context/ThemeProvider';
 import {useTranslation} from 'react-i18next';
+import { createThemeColors } from '@utils/themes';
 
 type Props = {
   addMessage: (message: string) => void;
@@ -14,6 +15,7 @@ type Props = {
 const MessageInput = ({addMessage}: Props) => {
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const colors = createThemeColors(theme);
 
   const styles = getStyles(theme);
 
@@ -28,6 +30,7 @@ const MessageInput = ({addMessage}: Props) => {
         value={message}
         style={styles.input}
         placeholder={t('yourMessage')}
+        placeholderTextColor={colors.mutedBlack}
       />
       <TouchableOpacity
         disabled={messageEmpty}
